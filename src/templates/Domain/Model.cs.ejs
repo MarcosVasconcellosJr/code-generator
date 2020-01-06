@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Domain.Model
+{
+    public class <%= props.entityName %> : BaseModel
+    {   <% props.attributtes.forEach(attributte => { %>
+        <%= attributte.attrVisibility %> <%= attributte.entityType %> <%= attributte.attrName %> { get; set; }<% }); %>
+        
+        public <%= props.entityName %>() : base()
+        {
+
+        }
+
+        public <%= props.entityName %>(String id) : base(id)
+        {
+            
+        }
+
+        public <%= props.entityName %>(Entities.<%= props.entityName %> entity, Boolean includeDeleted = false) : base(entity)
+        {
+            if (entity != null)
+            {
+                <% props.attributtes.forEach(attributte => { %> 
+                <%= attributte.attrName %> = entity.<%= attributte.attrName %>;<% }); %>
+            }
+        }
+
+        public static implicit operator <%= props.entityName %>(Entities.<%= props.entityName %> entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            <%= props.entityName %> result = new <%= props.entityName %>(entity);
+            return result;
+        }
+
+        public static implicit operator Entities.<%= props.entityName %>(<%= props.entityName %> model)
+        {
+            if (model == null)
+            { return null; }
+
+            return new Entities.<%= props.entityName %>()
+            {
+                Id = model.Id,
+
+                <% props.attributtes.forEach(attributte => { %>
+                <%= attributte.attrName %> = model.<%= attributte.attrName %>,<% }); %>
+            };
+        }
+
+        public static <%= props.entityName %> WithoutEFRelations(Entities.<%= props.entityName %> entity)
+        {
+            if (entity == null)
+            { return null; }
+
+            <%= props.entityName %> model = new <%= props.entityName %>()
+            {
+                <% props.attributtes.forEach(attributte => { %>
+                <%= attributte.attrName %> = entity.<%= attributte.attrName %>,<% }); %>
+            };
+
+            model.InitializeInstance(entity);
+
+            return model;
+        }
+    }
+}

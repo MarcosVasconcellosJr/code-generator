@@ -1,0 +1,106 @@
+using Domain.Entities;
+using Domain.Mechanism;
+using Domain.Repository;
+using Domain.SearchParameter;
+using Enumerator;
+using Exception;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Util;
+<% var name = props.entityName %> <% var attrs = props.attributtes;%>
+namespace Domain.Services
+{
+    public class <%=name%>Service : I<%=name%>Service
+    {
+        public <%=name%>Service(I<%=name%>Repository repository) : base(repository)
+        {
+            
+        }
+
+        public override IList<Model.<%=name%>> GetBySearchParameter(<%=name%>SearchParameter searchParameter, out Int32 count)
+        {
+            IList<Model.<%=name%>> returnList = null;
+            Boolean isOrdered = true;
+
+            IQueryable<<%=name%>> query = Repository.GetByExpression(x => <% attrs.forEach((attr, index) => { %>
+                <%= attr.entityType %>
+                <% if (attr.entityType === 'String') { %> (!String.IsNullOrEmpty(searchParameter.<%=attr.attrName%>) ? x.<%=attr.attrName%>.Contains(searchParameter.<%=attr.attrName%>) : true) <% } %> 
+                <% if (attr.entityType === 'Int32' || attr.entityType === 'Boolean' || attr.entityType === 'Double' || attr.entityType === 'DateTimeOffset' || attr.entityType === 'DateTime' || attr.entityType === 'Enumerator') { %>(searchParameter.<%=attr.attrName%>.HasValue ? x.<%=attr.attrName%>.Value == searchParameter.<%=attr.attrName%>.Value : true)<% } %> 
+                <% if (index < attrs.length - 1){%>&&<% } %> <% }); %>
+            );
+
+            #region ORDERBY
+
+            switch (searchParameter.OrderBy.ToUpper())
+            {<% attrs.forEach(attr => { %>
+
+                case `\"&{<%=attr.attrName.toUpperCase()%>}\"`:
+                    query = searchParameter.IsDesc ? query.OrderByDescending(x => x.<%=attr.attrName%>) : query.OrderBy(x => x.<%=attr.attrName%>);
+                    break;<% }); %>
+
+                default: isOrdered = false;
+                    break;
+            }
+
+            #endregion
+
+            returnList = Pagination(query, searchParameter, out count, isOrdered);
+
+            return returnList;
+        }
+        
+        public override <%=name%> Create(<%=name%> <%= props.entityName.toLowerCase() %>)
+        {
+            if (IsValid(<%= props.entityName.toLowerCase() %>))
+            {
+                String guid = this.Repository.Insert(<%= props.entityName.toLowerCase() %>);
+                <%= props.entityName.toLowerCase() %> = this.Repository.Get(guid);
+            }
+
+            return <%= props.entityName.toLowerCase() %>;
+        }
+
+        public override <%=name%> Update(<%=name%> <%= props.entityName.toLowerCase() %>)
+        {
+            if (IsValid(<%= name.toLowerCase() %>))
+            {
+                <%=name%> saved<%=name%> = this.Repository.Get(<%= name.toLowerCase() %>.Id);
+
+                if (saved<%=name%> == null) { throw new BusinessException(BusinessErrorMessage.<%=name.toUpperCase()%>_NOT_FOUND); }
+
+                String guid = this.Repository.Update(<%= name.toLowerCase() %>);
+                <%= name.toLowerCase() %> = this.Repository.Get(guid);
+            }
+
+            return <%= name.toLowerCase() %>;
+        }
+
+        #region Private Methods
+        private Boolean IsValid(<%=name%> <%=name.toLowerCase()%>)
+        {   <% attrs.forEach(attr => { %>
+            <% if (attr.attrRequired === 'Yes') { %>
+            <% if (attr.entityType === 'String') { %> if (String.IsNullOrEmpty(<%=name.toLowerCase()%>.<%=attr.attrName%>)) <% } %> <% if (attr.entityType === 'Int32' || attr.entityType === 'Boolean' || attr.entityType === 'Double' || attr.entityType === 'DateTimeOffset' || attr.entityType === 'DateTime') { %>(searchParameter.<%=attr.attrName%>.HasValue ? x.<%=attr.attrName%>.Value == searchParameter.<%=attr.attrName%>.Value : true)<% } %> <% if (index < attrs.length - 1){%>&&<% } %> <% if (attr.entityType === 'Enumerator') { %> if (!Enum.IsDefined(attr.entityTypeof(<%=attr.attrName%>), <%=name%>.<%=attr.attrName%>)) <% } %>{ throw new ValidationException(ValidationErrorMessage.INVALID_<%=attr.attrName%>); }
+            <% } %> 
+            <% }); %>
+            return true;
+        }
+        
+        #endregion
+
+        #region BASE_METHODS
+
+        public override Entities.<%=name%> ToEntity(Model.<%=name%> model)
+        {
+            return model;
+        }
+
+        public override Model.<%=name%> ToModel(Entities.<%=name%> entity)
+        {
+            return entity;
+        }
+
+        #endregion
+    }
+}

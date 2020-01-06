@@ -1,0 +1,24 @@
+using Domain.Repository;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace Repository
+{
+    public class <%= props.entityName %>Repository : BaseEntityRepository<Domain.Entities.<%= props.entityName %>, Domain.Model.<%= props.entityName %>>, I<%= props.entityName %>Repository
+    {
+        public <%= props.entityName %>Repository(RepositoryContext context) : base(context, context.<%= props.entityName %>)
+        {
+            Entity.Include(e => e.CMNCategoryNewList).ThenInclude(x => x.CMNCategory).ToList();
+        }
+
+        public override Domain.Model.<%= props.entityName %> ToModel(Domain.Entities.<%= props.entityName %> entity)
+        {
+            return entity;
+        }
+
+        public override Domain.Entities.<%= props.entityName %> ToEntity(Domain.Model.<%= props.entityName %> model)
+        {
+            return model;
+        }
+    }
+}

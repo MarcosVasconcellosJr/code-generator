@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Api.DTO;
+using Domain.Model;
+using Domain.Services;
+using Microsoft.AspNetCore.Mvc;
+using Api.Entities.DTO;
+using Microsoft.AspNetCore.Authorization;
+
+namespace Api.Entities.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class <%= props.entityName %>Controller : Api.Controllers.BaseControllerBase
+    {
+        public readonly I<%= props.entityName %>Service _<%= props.entityName.toLowerCase() %>Service;
+
+        public <%= props.entityName %>Controller(
+            I<%= props.entityName %>Service <%= props.entityName.toLowerCase() %>Service
+            ) : base()
+        {
+            _<%= props.entityName.toLowerCase() %>Service = <%= props.entityName.toLowerCase() %>Service;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Public<%= props.entityName %>DTO>> Get()
+        {
+            return _<%= props.entityName.toLowerCase() %>Service.GetAll().Select(Public<%= props.entityName %>DTO.ConvertModelToDTO).ToList();
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Public<%= props.entityName %>DTO> Get(String id)
+        {
+            return Public<%= props.entityName %>DTO.ConvertModelToDTO(_<%= props.entityName.toLowerCase() %>Service.Get(id));
+        }
+
+        [HttpPost]
+        public ActionResult<Public<%= props.entityName %>DTO> Post(Private<%= props.entityName %>DTO <%= props.entityName.toLowerCase() %>)
+        {
+            return Public<%= props.entityName %>DTO.ConvertModelToDTO(_<%= props.entityName.toLowerCase() %>Service.Get(_<%= props.entityName.toLowerCase() %>Service.Insert(Private<%= props.entityName %>DTO.ConvertDTOToModel(<%= props.entityName.toLowerCase() %>))));
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<Public<%= props.entityName %>DTO> Put(String id, Private<%= props.entityName %>DTO <%= props.entityName.toLowerCase() %>)
+        {
+            <%= props.entityName.toLowerCase() %>.Id = id;
+            return Public<%= props.entityName %>DTO.ConvertModelToDTO(_<%= props.entityName.toLowerCase() %>Service.Get(_<%= props.entityName.toLowerCase() %>Service.Update(Private<%= props.entityName %>DTO.ConvertDTOToModel(<%= props.entityName.toLowerCase() %>))));
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<String> Delete(String id)
+        {
+            return _<%= props.entityName.toLowerCase() %>Service.Delete(id);
+        }
+    }
+}

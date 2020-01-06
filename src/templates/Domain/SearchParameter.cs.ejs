@@ -1,0 +1,25 @@
+using Enumerator;
+using System;
+using System.Collections.Generic;
+<% var attrs = props.attributtes; %>
+namespace Domain.SearchParameter
+{
+    public class <%= props.entityName %>SearchParameter : BaseSearchParameter
+    {
+        //TODO: Add verification by entityattr.entityType (?)
+        <% attrs.forEach(attr => { %>
+        <%= attr.attrVisibility %> <%= attr.entityType %><% if (attr.entityType === 'Enumerator' || attr.entityType === 'Int32' || attr.entityType === 'Boolean' || attr.entityType === 'Double' || attr.entityType === 'DateTimeOffset' || attr.entityType === 'DateTime') { %>? <%= attr.attrName %> { get; set; }<% } else{ %> <%= attr.attrName %> { get; set; } <% } %> 
+        <% }); %>
+
+<% if(true){ %>
+   <h1>foo</h1>
+ <% } else{ %>  
+   <h1>bar</h1>
+<% } %>
+
+        public <%= props.entityName %>SearchParameter(BaseSearchParameter searchParameter = null) : base(searchParameter)
+        {
+            
+        }
+    }
+}

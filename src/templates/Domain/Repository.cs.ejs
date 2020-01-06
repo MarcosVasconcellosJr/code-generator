@@ -1,0 +1,8 @@
+using Domain.Entities;
+
+namespace Domain.Repository
+{
+    public interface I<%= props.entityName %>Repository : IRepository<Entities.<%= props.entityName %>, Model.<%= props.entityName %>>
+    {
+    }
+}

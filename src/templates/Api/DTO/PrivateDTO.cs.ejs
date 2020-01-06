@@ -1,0 +1,48 @@
+using Api.DTO;
+using Domain.Model;
+using System;
+
+namespace Api.Entities.DTO
+{
+    public class Private<%= props.entityName %>DTO : PrivateBaseDTO<<%= props.entityName %>>
+    {   <% props.attributtes.forEach(attributte => { %>
+        <%= attributte.attrVisibility %> <%= attributte.entityType %> <%= attributte.attrName %> { get; set; }<% }); %>
+        
+        // TODO: Remove unecessary fields
+        // TODO: Verify other entity Relations
+        // Model this by each case
+
+        public Private<%= props.entityName %>DTO()
+        {
+        }
+
+        public Private<%= props.entityName %>DTO(<%= props.entityName %> o) : base(o)
+        {
+            if (o == null) { return; }
+
+            <% props.attributtes.forEach(attributte => { %>
+            <%= attributte.attrName %> = o.<%= attributte.attrName %>;<% }); %>
+        }
+
+        public static Private<%= props.entityName %>DTO ConvertModelToDTO(<%= props.entityName %> o)
+        {
+            if (o == null) { return null; }
+            return new Private<%= props.entityName %>DTO(o);
+        }
+
+        public static <%= props.entityName %> ConvertDTOToModel(Private<%= props.entityName %>DTO o)
+        {
+            if (o == null) { return null; }
+
+            <%= props.entityName %> <%= props.entityName %> = new <%= props.entityName %>()
+            {
+                <% props.attributtes.forEach(attributte => { %>
+                <%= attributte.attrName %> = o.<%= attributte.attrName %>,<% }); %>
+            };
+
+            <%= props.entityName %> = o.InitializeInstance(<%= props.entityName %>);
+
+            return <%= props.entityName %>;
+        }
+    }
+}
