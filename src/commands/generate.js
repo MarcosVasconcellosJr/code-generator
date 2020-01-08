@@ -1,15 +1,15 @@
-const { questionerAmountAttrs, questioner } = require('../mechanism/questioner');
-const { generateSourceCode } = require('../mechanism/generator');
+const { questionerAmountAttrs, questioner } = require('../manager/questioners/questioner');
+const { generateSourceCode } = require('../manager/generators/generator');
 
 module.exports = {
-	name: 'clean',
-	description: 'Delete',
-	run: async (toolbox) => {
+	name: 'generate',
+	description: 'Create an (service, repository, searchParameter and DTOs) based on entity has passed into CLI',
+	run: async toolbox => {
 
 		const {
 			parameters,
 			template,
-			print: { success, error, debug, warning},
+			print: { success, error },
 			prompt
 		} = toolbox;
 

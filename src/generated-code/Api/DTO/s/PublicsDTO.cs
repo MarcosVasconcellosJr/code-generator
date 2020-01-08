@@ -4,19 +4,20 @@ using System;
 
 namespace Api.Entities.DTO
 {
-    public class SelectiveTerminalDTO : SelectiveBaseDTO<Terminal>
+    public class PublicsDTO : PublicBaseDTO<s>
     {   
            { get; set; }
            { get; set; }
+        
         // TODO: Remove unecessary fields
         // TODO: Verify other entity Relations
         // Model this by each case
 
-        public SelectiveTerminalDTO()
+        public PublicsDTO()
         {
         }
 
-        public SelectiveTerminalDTO(Terminal o) : base(o)
+        public PublicsDTO(s o) : base(o)
         {
             if (o == null) { return; }
 
@@ -25,26 +26,26 @@ namespace Api.Entities.DTO
              = o.;
         }
 
-        public static SelectiveTerminalDTO ConvertModelToDTO(Terminal o)
+        public static PublicsDTO ConvertModelToDTO(s o)
         {
             if (o == null) { return null; }
-            return new SelectiveTerminalDTO(o);
+            return new PublicsDTO(o);
         }
 
-        public static Terminal ConvertDTOToModel(SelectiveTerminalDTO o)
+        public static s ConvertDTOToModel(PublicsDTO o)
         {
             if (o == null) { return null; }
 
-            Terminal Terminal = new Terminal()
+            s s = new s()
             {
                 
                  = o.,
                  = o.,
             };
 
-            Terminal = o.InitializeInstance(Terminal);
+            s = o.InitializeInstance(s);
 
-            return Terminal;
+            return s;
         }
     }
 }

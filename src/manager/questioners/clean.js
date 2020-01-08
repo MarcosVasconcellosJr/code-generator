@@ -1,4 +1,4 @@
-const _QUESTIONS = require('./questions');
+const _QUESTIONS = require('../questions/generate');
 
 async function questionerAmountAttrs(prompt, error) {
     const response = await prompt.ask(_QUESTIONS.askAmountAttrs);
@@ -35,7 +35,7 @@ async function questioner(prompt, entityName, amountOfAttributtes, success, erro
             answer.askAttrType = Object.assign({}, await prompt.ask(_QUESTIONS.askAttrType));
             if (answer.askAttrName.attrType === '') {error("Attribute type must be specified"); }
         } while(answer.askAttrType == {} || answer.askAttrName.attrType === '');
-
+        
         do {
             answer.askAttrVisibility = Object.assign({}, await prompt.ask(_QUESTIONS.askAttrVisibility));
             if (answer.askAttrVisibility.attrVisibility === '') {error("Attribute visibility must be specified"); }
@@ -63,7 +63,9 @@ async function questioner(prompt, entityName, amountOfAttributtes, success, erro
                 if (answer.askAttrRelationType.attrRelationType === '') {error("Attribute relation type must be specified"); }
             } while(answer.askAttrRelationType == {} || answer.askAttrRelationType.attrRelationType === '');
         }
-        console.log({ answer });
+
+        console.dir(answer.askAttrIsRelationObject, {depht: null, colors: true});
+        
         answers.push(Object.assign({}, answer));
         success(`--------------- ${entityName} OK ------------------`);
     }

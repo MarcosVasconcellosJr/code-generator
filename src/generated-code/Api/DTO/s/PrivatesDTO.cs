@@ -4,44 +4,48 @@ using System;
 
 namespace Api.Entities.DTO
 {
-    public class SelectiveHAUHAUHAUDTO : SelectiveBaseDTO<HAUHAUHAU>
+    public class PrivatesDTO : PrivateBaseDTO<s>
     {   
            { get; set; }
+           { get; set; }
+        
         // TODO: Remove unecessary fields
         // TODO: Verify other entity Relations
         // Model this by each case
 
-        public SelectiveHAUHAUHAUDTO()
+        public PrivatesDTO()
         {
         }
 
-        public SelectiveHAUHAUHAUDTO(HAUHAUHAU o) : base(o)
+        public PrivatesDTO(s o) : base(o)
         {
             if (o == null) { return; }
 
             
              = o.;
+             = o.;
         }
 
-        public static SelectiveHAUHAUHAUDTO ConvertModelToDTO(HAUHAUHAU o)
+        public static PrivatesDTO ConvertModelToDTO(s o)
         {
             if (o == null) { return null; }
-            return new SelectiveHAUHAUHAUDTO(o);
+            return new PrivatesDTO(o);
         }
 
-        public static HAUHAUHAU ConvertDTOToModel(SelectiveHAUHAUHAUDTO o)
+        public static s ConvertDTOToModel(PrivatesDTO o)
         {
             if (o == null) { return null; }
 
-            HAUHAUHAU HAUHAUHAU = new HAUHAUHAU()
+            s s = new s()
             {
                 
                  = o.,
+                 = o.,
             };
 
-            HAUHAUHAU = o.InitializeInstance(HAUHAUHAU);
+            s = o.InitializeInstance(s);
 
-            return HAUHAUHAU;
+            return s;
         }
     }
 }

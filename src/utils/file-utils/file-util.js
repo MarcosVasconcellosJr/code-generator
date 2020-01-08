@@ -1,17 +1,17 @@
 import fs from 'fs';
 
 export const read = (fileName) => {
-    var _data = "";
+    var data = "";
 
     try {
-        _data = fs.readFileSync(fileName, "ascii");
+        data = fs.readFileSync(fileName, "ascii");
     }
     catch (err) {
         console.error("There was an error opening the file:");
         console.log(err);
     }
 
-    return _data;
+    return data;
 }
 
 export const write = (fileName, content) => {
