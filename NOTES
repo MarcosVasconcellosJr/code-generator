@@ -1,0 +1,15 @@
+The CLI have to Generate code so for that we need:
+  - Read user Input
+  - Understand User Input
+  - Generate the code
+  - Output code generated into Files
+
+So we have:
+  - The Entry point that are the command with a Run function
+  - The EJS template to generate code on top of
+
+So the archtecture would be:
+  - The entry point: commands/generate (melhorar nome)
+  - Run function that must be separated from the command: runners/generate
+  - The mechanism/logic piece where do you call the generator: logic/generate
+  - The managers functions used to manage the files that must be separated from the runners: managers/generate

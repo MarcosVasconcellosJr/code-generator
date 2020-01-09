@@ -1,4 +1,4 @@
-const _QUESTIONS = require('./questions');
+const _QUESTIONS = require('../config/questions');
 
 async function questionerAmountAttrs(prompt, error) {
     const response = await prompt.ask(_QUESTIONS.askAmountAttrs);
